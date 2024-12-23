@@ -85,15 +85,12 @@ class MediaRepositoryImpl(
         workManager.updateDatabase()
     }
 
-    /**
-     * TODO: Add media reordering
-     */
-    override fun getMedia(): Flow<Resource<List<UriMedia>>> =
+    override fun getMedia(mediaOrder: MediaOrder): Flow<Resource<List<UriMedia>>> =
         MediaFlow(
             contentResolver = contentResolver,
             buckedId = MediaStoreBuckets.MEDIA_STORE_BUCKET_TIMELINE.id
         ).flowData().map {
-            Resource.Success(MediaOrder.Date(OrderType.Descending).sortMedia(it))
+            Resource.Success(mediaOrder.sortMedia(it))
         }.flowOn(Dispatchers.IO)
 
     override fun getMediaByType(allowedMedia: AllowedMedia): Flow<Resource<List<UriMedia>>> =

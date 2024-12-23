@@ -52,7 +52,7 @@ object Settings {
     const val PREFERENCE_NAME = "settings"
 
     object Album {
-        private val LAST_SORT = stringPreferencesKey("album_last_sort_obj")
+        private val LAST_SORT = stringPreferencesKey("timeline_last_sort_obj")
 
         @Serializable
         @Parcelize
@@ -95,6 +95,82 @@ object Settings {
             }
             val key by rememberedDerivedState {
                 if (isLandscape) "album_grid_size_landscape" else "album_grid_size"
+            }
+
+            var storedSize = remember(prefs, key, defaultValue, orientation, windowSizeClass) {
+                prefs.getInt(key, defaultValue)
+            }
+
+            return remember(storedSize) {
+                object : MutableState<Int> {
+                    override var value: Int
+                        get() = storedSize
+                        set(value) {
+                            scope.launch {
+                                prefs.edit {
+                                    putInt(key, value)
+                                    storedSize = value
+                                }
+                            }
+                        }
+
+                    override fun component1() = value
+                    override fun component2(): (Int) -> Unit = { value = it }
+                }
+            }
+        }
+
+        private val HIDE_TIMELINE_ON_ALBUM = booleanPreferencesKey("hide_timeline_on_album")
+
+        @Composable
+        fun rememberHideTimelineOnAlbum() =
+            rememberPreference(key = HIDE_TIMELINE_ON_ALBUM, defaultValue = false)
+    }
+
+    object Timeline {
+        private val LAST_SORT = stringPreferencesKey("timeline_last_sort_obj")
+
+        @Serializable
+        @Parcelize
+        data class LastSort(
+            val orderType: OrderType,
+            val kind: FilterKind
+        ) : Parcelable
+
+        @Composable
+        fun rememberLastSort() =
+            rememberPreference(
+                key = LAST_SORT,
+                defaultValue = LastSort(OrderType.Descending, FilterKind.DATE)
+            )
+
+        @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+        @Composable
+        fun rememberTimelineGridSize(): MutableState<Int> {
+            val scope = rememberCoroutineScope()
+            val context = LocalContext.current
+            val prefs = remember(context) {
+                context.getSharedPreferences("ui_settings", Context.MODE_PRIVATE)
+            }
+
+            val windowSizeClass = (context as? Activity)?.let { calculateWindowSizeClass(it) }
+            val defaultValue = remember(windowSizeClass) {
+                cellsList.indexOf(
+                    GridCells.Fixed(
+                        when (windowSizeClass?.widthSizeClass) {
+                            WindowWidthSizeClass.Expanded -> 5
+                            else -> 2
+                        }
+                    )
+                )
+            }
+            val orientation = LocalConfiguration.current.orientation
+            val isLandscape by rememberedDerivedState(orientation, windowSizeClass) {
+                orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE ||
+                        windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
+            }
+            val key by rememberedDerivedState {
+                if (isLandscape) "timeline_grid_size_landscape" else "timeline_grid_size"
             }
 
             var storedSize = remember(prefs, key, defaultValue, orientation, windowSizeClass) {

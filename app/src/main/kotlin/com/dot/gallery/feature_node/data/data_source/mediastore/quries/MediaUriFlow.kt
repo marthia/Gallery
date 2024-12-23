@@ -137,6 +137,8 @@ class MediaUriFlow(
             val albumLabel = it.tryGetString(indexCache[i++], Build.MODEL)
             val takenTimestamp = it.tryGetLong(indexCache[i++])
             val modifiedTimestamp = it.getLong(indexCache[i++])
+            val width = it.getLong(indexCache[i++])
+            val height = it.getLong(indexCache[i++])
             val duration = it.tryGetString(indexCache[i++])
             val size = it.getLong(indexCache[i++])
             val mimeType = it.getString(indexCache[i++])
@@ -162,6 +164,8 @@ class MediaUriFlow(
                 expiryTimestamp = expiryTimestamp,
                 fullDate = formattedDate,
                 duration = duration,
+                width = width,
+                height = height,
                 favorite = isFavorite,
                 trashed = isTrashed,
                 size = size,

@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dokar.pinchzoomgrid.PinchZoomGridScope
+import com.dokar.pinchzoomgrid.PinchZoomGridState
 import com.dot.gallery.core.Constants.Animation.enterAnimation
 import com.dot.gallery.core.Constants.Animation.exitAnimation
 import com.dot.gallery.core.Settings.Misc.rememberAutoHideSearchBar
@@ -56,6 +57,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 fun <T : Media> PinchZoomGridScope.MediaGridView(
     mediaState: State<MediaState<T>>,
+    pinchState: PinchZoomGridState,
     paddingValues: PaddingValues = PaddingValues(0.dp),
     searchBarPaddingTop: Dp = 0.dp,
     showSearchBar: Boolean = remember { false },
@@ -67,7 +69,7 @@ fun <T : Media> PinchZoomGridScope.MediaGridView(
     allowHeaders: Boolean = true,
     enableStickyHeaders: Boolean = false,
     showMonthlyHeader: Boolean = false,
-    aboveGridContent: @Composable (() -> Unit)? = null,
+    aboveGridContent: @Composable (PinchZoomGridScope.() -> Unit)? = null,
     isScrolling: MutableState<Boolean>,
     emptyContent: @Composable () -> Unit,
     onMediaClick: @DisallowComposableCalls (media: T) -> Unit = {},
@@ -197,6 +199,7 @@ fun <T : Media> PinchZoomGridScope.MediaGridView(
                 gridState = gridState,
                 mediaState = mediaState,
                 mappedData = mappedData,
+                pinchState = pinchState,
                 paddingValues = paddingValues,
                 allowSelection = allowSelection,
                 selectionState = selectionState,
@@ -217,6 +220,7 @@ fun <T : Media> PinchZoomGridScope.MediaGridView(
         MediaGrid(
             gridState = gridState,
             mediaState = mediaState,
+            pinchState = pinchState,
             mappedData = mappedData,
             paddingValues = paddingValues,
             allowSelection = allowSelection,

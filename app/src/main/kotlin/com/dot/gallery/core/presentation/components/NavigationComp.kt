@@ -81,7 +81,10 @@ fun NavigationComp(
     val navPipe = hiltViewModel<ChanneledViewModel>()
     navPipe
         .initWithNav(navController, bottomBarState)
-        .collectAsStateWithLifecycle(LocalLifecycleOwner.current, context = Dispatchers.Main.immediate)
+        .collectAsStateWithLifecycle(
+            LocalLifecycleOwner.current,
+            context = Dispatchers.Main.immediate
+        )
     val groupTimelineByMonth by rememberTimelineGroupByMonth()
 
     val context = LocalContext.current
@@ -123,7 +126,8 @@ fun NavigationComp(
             if (it != Screen.VaultScreen()) {
                 shouldSkipAuth.value = false
             }
-            systemBarFollowThemeState.value = !(it.contains(Screen.MediaViewScreen.route) || it.contains(Screen.VaultScreen()))
+            systemBarFollowThemeState.value =
+                !(it.contains(Screen.MediaViewScreen.route) || it.contains(Screen.VaultScreen()))
         }
     }
 
@@ -172,6 +176,7 @@ fun NavigationComp(
                 selectionState = timelineViewModel.multiSelectState,
                 selectedMedia = timelineViewModel.selectedPhotoState,
                 toggleSelection = timelineViewModel::toggleSelection,
+                filterOptions = timelineViewModel.rememberFilters(),
                 navigate = navPipe::navigate,
                 navigateUp = navPipe::navigateUp,
                 toggleNavbar = navPipe::toggleNavbar,
@@ -274,6 +279,7 @@ fun NavigationComp(
                 selectionState = vm.multiSelectState,
                 selectedMedia = vm.selectedPhotoState,
                 allowNavBar = false,
+                filterOptions = albumsViewModel.rememberFilters(),
                 allowHeaders = !hideTimeline,
                 enableStickyHeaders = !hideTimeline,
                 toggleSelection = vm::toggleSelection,

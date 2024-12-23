@@ -74,7 +74,18 @@ class AlbumsViewModel @Inject constructor(
                     titleRes = R.string.filter_type_name,
                     filterKind = FilterKind.NAME,
                     onClick = { albumOrder = it }
-                )
+                ),
+                FilterOption(
+                    titleRes = R.string.filter_type_size,
+                    filterKind = FilterKind.SIZE,
+                    onClick = { albumOrder = it }
+                ),
+                FilterOption(
+                    titleRes = R.string.filter_type_resolution,
+                    filterKind = FilterKind.RESOLUTION,
+                    onClick = { albumOrder = it }
+                ),
+
             )
         }
     }

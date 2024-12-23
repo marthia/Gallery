@@ -56,17 +56,17 @@ fun MediaRepository.mediaFlowWithType(
         getMediaByType(allowedMedia)
     }).flowOn(Dispatchers.IO).conflate()
 
-fun MediaRepository.mediaFlow(albumId: Long, target: String?): Flow<Resource<List<UriMedia>>> =
+fun MediaRepository.mediaFlow(albumId: Long, target: String?, mediaOrder: MediaOrder): Flow<Resource<List<UriMedia>>> =
     (if (albumId != -1L) {
         getMediaByAlbumId(albumId)
     } else if (!target.isNullOrEmpty()) {
         when (target) {
             Constants.Target.TARGET_FAVORITES -> getFavorites(mediaOrder = MediaOrder.Default)
             Constants.Target.TARGET_TRASH -> getTrashed()
-            else -> getMedia()
+            else -> getMedia(mediaOrder)
         }
     } else {
-        getMedia()
+        getMedia(mediaOrder)
     })
 
 fun <T : Media> Flow<Resource<List<T>>>.mapMedia(

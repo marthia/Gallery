@@ -124,5 +124,5 @@ data class FilterOption(
 )
 
 enum class FilterKind {
-    DATE, NAME
+    DATE, NAME, SIZE, RESOLUTION
 }

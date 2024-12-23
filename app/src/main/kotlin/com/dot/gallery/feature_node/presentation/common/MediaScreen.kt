@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.dokar.pinchzoomgrid.PinchZoomGridLayout
+import com.dokar.pinchzoomgrid.PinchZoomGridScope
 import com.dokar.pinchzoomgrid.rememberPinchZoomGridState
 import com.dot.gallery.core.Constants.Target.TARGET_TRASH
 import com.dot.gallery.core.Constants.cellsList
@@ -69,7 +70,7 @@ fun <T: Media> MediaScreen(
     customViewingNavigation: ((media: T) -> Unit)? = null,
     navActionsContent: @Composable (RowScope.(expandedDropDown: MutableState<Boolean>, result: ActivityResultLauncher<IntentSenderRequest>) -> Unit),
     emptyContent: @Composable () -> Unit = { EmptyMedia() },
-    aboveGridContent: @Composable (() -> Unit)? = remember { null },
+    aboveGridContent: @Composable (PinchZoomGridScope.() -> Unit)? = remember { null },
     navigate: (route: String) -> Unit,
     navigateUp: () -> Unit,
     toggleNavbar: (Boolean) -> Unit,
@@ -163,6 +164,7 @@ fun <T: Media> MediaScreen(
                 MediaGridView(
                     mediaState = mediaState,
                     allowSelection = true,
+                    pinchState = pinchState,
                     showSearchBar = showSearchBar,
                     searchBarPaddingTop = remember(paddingValues) {
                         paddingValues.calculateTopPadding()

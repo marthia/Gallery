@@ -108,6 +108,8 @@ class ClassifierWorker @AssistedInject constructor(
                                     mimeType = item.mimeType,
                                     favorite = item.favorite,
                                     trashed = item.trashed,
+                                    width = item.width,
+                                    height = item.height,
                                     size = item.size,
                                     duration = item.duration
                                 )

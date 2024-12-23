@@ -29,7 +29,7 @@ interface MediaRepository {
 
     suspend fun updateInternalDatabase()
 
-    fun getMedia(): Flow<Resource<List<UriMedia>>>
+    fun getMedia(mediaOrder: MediaOrder): Flow<Resource<List<UriMedia>>>
 
     fun getMediaByType(allowedMedia: AllowedMedia): Flow<Resource<List<UriMedia>>>
 

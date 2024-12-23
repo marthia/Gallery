@@ -244,6 +244,8 @@
     <string name="created">Erstellt</string>
     <string name="filter_type_date">Datum</string>
     <string name="filter_type_name">Name</string>
+    <string name="filter_type_size">Größe</string>
+    <string name="filter_type_resolution">Auflösung</string>
     <string name="images_videos"><![CDATA[%1$s Bilder und Videos]]></string>
     <string name="auto_hide_searchbar">Suchleiste beim Scrollen ausblenden</string>
     <string name="auto_hide_searchbar_summary">Automatisches Ausblenden der Suchleiste oder der oberen Leiste des Bildschirms beim Scrollen</string>

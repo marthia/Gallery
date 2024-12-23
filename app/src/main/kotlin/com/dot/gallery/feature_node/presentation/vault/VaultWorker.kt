@@ -72,6 +72,8 @@ class VaultWorker @AssistedInject constructor(
                         takenTimestamp = null,
                         fullDate = "",
                         mimeType = "",
+                        width = 0,
+                        height = 0,
                         favorite = 0,
                         trashed = 0,
                         size = 0,

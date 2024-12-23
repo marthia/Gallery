@@ -136,6 +136,8 @@ class MediaFlow(
         val albumID = it.getLong(indexCache[i++])
         val albumLabel = it.tryGetString(indexCache[i++], Build.MODEL)
         val takenTimestamp = it.tryGetLong(indexCache[i++])
+        val width = it.getLong(indexCache[i++])
+        val height = it.getLong(indexCache[i++])
         val modifiedTimestamp = it.getLong(indexCache[i++])
         val duration = it.tryGetString(indexCache[i++])
         val size = it.getLong(indexCache[i++])
@@ -158,6 +160,8 @@ class MediaFlow(
             albumID = albumID,
             albumLabel = albumLabel ?: Build.MODEL,
             timestamp = modifiedTimestamp,
+            width = width,
+            height = height,
             takenTimestamp = takenTimestamp,
             expiryTimestamp = expiryTimestamp,
             fullDate = formattedDate,

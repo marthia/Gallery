@@ -10,6 +10,8 @@ import com.dot.gallery.feature_node.domain.model.TimelineSettings
 import com.dot.gallery.feature_node.presentation.picker.AllowedMedia
 import kotlinx.coroutines.flow.Flow
 
+private const val MAX_VARIABLES = 999
+
 @Dao
 interface MediaDao {
 
@@ -44,8 +46,17 @@ interface MediaDao {
         val mediaIds = mediaList.map { it.id }
 
         // Delete items from the database that are not in mediaList
-        deleteMediaNotInList(mediaIds)
+        chunkedDeleteMedia(mediaIds)
     }
+
+
+    suspend fun chunkedDeleteMedia(mediaIds: List<Long>) {
+        val batches = mediaIds.chunked(MAX_VARIABLES)
+        batches.forEach { batch ->
+            deleteMediaNotInList(batch)
+        }
+    }
+
 
     @Query("DELETE FROM media WHERE id NOT IN (:mediaIds)")
     suspend fun deleteMediaNotInList(mediaIds: List<Long>)

@@ -299,6 +299,7 @@ fun VaultDisplay(
         PinchZoomGridLayout(state = pinchState) {
             MediaGridView(
                 mediaState = mediaState,
+                pinchState = pinchState,
                 allowSelection = true,
                 showSearchBar = false,
                 enableStickyHeaders = false,

@@ -244,6 +244,7 @@
     <string name="created">Créé</string>
     <string name="filter_type_date">Date</string>
     <string name="filter_type_name">Nom</string>
+    <string name="filter_type_resolution">Résolution</string>
     <string name="images_videos"><![CDATA[%1$s Images & Vidéos]]></string>
     <string name="auto_hide_searchbar">Masquer la barre de recherche lors du défilement</string>
     <string name="auto_hide_searchbar_summary">Masquer automatiquement la barre de recherche ou la barre supérieure de l\'écran lors du défilement</string>
@@ -291,4 +292,5 @@
         <item quantity="one">%s élément</item>
         <item quantity="other">%s éléments</item>
     </plurals>
+    <string name="filter_type_size">Taille</string>
 </resources>

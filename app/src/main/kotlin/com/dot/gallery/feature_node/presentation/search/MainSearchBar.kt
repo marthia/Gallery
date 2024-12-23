@@ -277,6 +277,7 @@ fun MainSearchBar(
                         PinchZoomGridLayout(state = pinchState) {
                             MediaGridView(
                                 mediaState = state,
+                                pinchState = pinchState,
                                 paddingValues = pd,
                                 canScroll = canScroll,
                                 isScrolling = remember { mutableStateOf(false) },

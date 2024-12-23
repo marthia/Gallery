@@ -160,6 +160,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.room.runtime.android)
     runtimeOnly(libs.androidx.profileinstaller)
     implementation(project(":libs:cropper"))
     "baselineProfile"(project(mapOf("path" to ":baselineprofile")))

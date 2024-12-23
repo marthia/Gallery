@@ -26,7 +26,9 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.dokar.pinchzoomgrid.PinchZoomGridLayout
 import com.dokar.pinchzoomgrid.PinchZoomGridScope
+import com.dokar.pinchzoomgrid.PinchZoomGridState
 import com.dot.gallery.R
 import com.dot.gallery.core.Constants.Animation.enterAnimation
 import com.dot.gallery.core.Constants.Animation.exitAnimation
@@ -45,8 +47,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
-fun <T: Media> PinchZoomGridScope.MediaGrid(
+fun <T : Media> PinchZoomGridScope.MediaGrid(
     gridState: LazyGridState,
+    pinchState: PinchZoomGridState,
     mediaState: State<MediaState<T>>,
     mappedData: SnapshotStateList<MediaItem<T>>,
     paddingValues: PaddingValues,
@@ -56,7 +59,7 @@ fun <T: Media> PinchZoomGridScope.MediaGrid(
     toggleSelection: @DisallowComposableCalls (Int) -> Unit,
     canScroll: Boolean,
     allowHeaders: Boolean,
-    aboveGridContent: @Composable() (() -> Unit)?,
+    aboveGridContent: @Composable() (PinchZoomGridScope.() -> Unit)?,
     isScrolling: MutableState<Boolean>,
     emptyContent: @Composable () -> Unit,
     onMediaClick: @DisallowComposableCalls (media: T) -> Unit
@@ -76,7 +79,9 @@ fun <T: Media> PinchZoomGridScope.MediaGrid(
                     span = { GridItemSpan(maxLineSpan) },
                     key = "aboveGrid"
                 ) {
-                    aboveGridContent.invoke()
+                    PinchZoomGridLayout(pinchState) {
+                        aboveGridContent.invoke(this)
+                    }
                 }
             }
         }
@@ -157,7 +162,7 @@ fun <T: Media> PinchZoomGridScope.MediaGrid(
 }
 
 @Composable
-private fun <T: Media> PinchZoomGridScope.MediaGridContentWithHeaders(
+private fun <T : Media> PinchZoomGridScope.MediaGridContentWithHeaders(
     mediaState: State<MediaState<T>>,
     mappedData: SnapshotStateList<MediaItem<T>>,
     paddingValues: PaddingValues,
@@ -285,7 +290,7 @@ private fun <T: Media> PinchZoomGridScope.MediaGridContentWithHeaders(
 }
 
 @Composable
-private fun <T: Media> PinchZoomGridScope.MediaGridContent(
+private fun <T : Media> PinchZoomGridScope.MediaGridContent(
     mediaState: State<MediaState<T>>,
     paddingValues: PaddingValues,
     allowSelection: Boolean,

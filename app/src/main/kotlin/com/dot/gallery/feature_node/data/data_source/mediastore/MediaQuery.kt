@@ -18,6 +18,8 @@ object MediaQuery {
         MediaStore.Files.FileColumns.DATE_MODIFIED,
         MediaStore.Files.FileColumns.DURATION,
         MediaStore.Files.FileColumns.SIZE,
+        MediaStore.Files.FileColumns.WIDTH,
+        MediaStore.Files.FileColumns.HEIGHT,
         MediaStore.Files.FileColumns.MIME_TYPE,
         MediaStore.Files.FileColumns.IS_FAVORITE,
         MediaStore.Files.FileColumns.IS_TRASHED,

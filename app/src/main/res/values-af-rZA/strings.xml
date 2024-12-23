@@ -291,4 +291,5 @@
         <item quantity="one">%s item</item>
         <item quantity="other">%s items</item>
     </plurals>
+    <string name="filter_type_size">Size</string>
 </resources>

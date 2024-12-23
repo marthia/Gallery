@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        enforceSecureFlag()
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
+//        enforceSecureFlag()
         enableEdgeToEdge()
         setContent {
             GalleryTheme {

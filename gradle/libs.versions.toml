@@ -44,6 +44,7 @@ composealpha = "1.8.0-alpha06"
 kotlinxSerializationJson = "1.7.3"
 workRuntimeKtx = "2.10.0"
 zoomimageViewSketch = "1.1.0-rc01"
+roomRuntimeAndroid = "2.7.0-alpha12"
 
 [libraries]
 # AndroidX
@@ -148,6 +149,7 @@ tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.r
 tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteTaskVision" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
 zoomimage-sketch = { module = "io.github.panpf.zoomimage:zoomimage-compose-sketch4", version.ref = "zoomimageViewSketch" }
+androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -9,13 +9,19 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dot.gallery.R
 import com.dot.gallery.core.Constants
 import com.dot.gallery.core.Resource
 import com.dot.gallery.core.Settings
+import com.dot.gallery.core.presentation.components.FilterKind
+import com.dot.gallery.core.presentation.components.FilterOption
 import com.dot.gallery.feature_node.domain.model.IgnoredAlbum
 import com.dot.gallery.feature_node.domain.model.Media
 import com.dot.gallery.feature_node.domain.model.Media.UriMedia
@@ -25,6 +31,8 @@ import com.dot.gallery.feature_node.domain.model.Vault
 import com.dot.gallery.feature_node.domain.model.VaultState
 import com.dot.gallery.feature_node.domain.repository.MediaRepository
 import com.dot.gallery.feature_node.domain.use_case.MediaHandleUseCase
+import com.dot.gallery.feature_node.domain.util.MediaOrder
+import com.dot.gallery.feature_node.domain.util.OrderType
 import com.dot.gallery.feature_node.presentation.util.collectMedia
 import com.dot.gallery.feature_node.presentation.util.mapMediaToItem
 import com.dot.gallery.feature_node.presentation.util.mediaFlow
@@ -71,6 +79,16 @@ open class MediaViewModel @Inject constructor(
             }
         }
 
+    private var timelineOrder: MediaOrder
+        get() = settingsFlow.value?.timelineMediaOrder ?: MediaOrder.Date(OrderType.Descending)
+        set(value) {
+            viewModelScope.launch(Dispatchers.IO) {
+                settingsFlow.value?.copy(timelineMediaOrder = value)?.let {
+                    repository.updateTimelineSettings(it)
+                }
+            }
+        }
+
     private val settingsFlow = repository.getTimelineSettings()
         .stateIn(
             viewModelScope,
@@ -95,7 +113,7 @@ open class MediaViewModel @Inject constructor(
 
     val mediaFlow by lazy {
         combine(
-            repository.mediaFlow(albumId, target),
+            repository.mediaFlow(albumId, target, timelineOrder),
             settingsFlow,
             blacklistedAlbums,
             combine(
@@ -111,8 +129,10 @@ open class MediaViewModel @Inject constructor(
                 isLoading = false
             )
             updateDatabase()
+            val newOrder = settings?.timelineMediaOrder ?: timelineOrder
+            val data = newOrder.sortMedia(result.data ?: emptyList())
             mapMediaToItem(
-                data = (result.data ?: emptyList()).toMutableList().apply {
+                data = data.toMutableList().apply {
                     removeAll { media -> blacklistedAlbums.any { it.shouldIgnore(media) } }
                 },
                 error = result.message ?: "",
@@ -129,6 +149,36 @@ open class MediaViewModel @Inject constructor(
         .map { it.data ?: emptyList() }
         .map { VaultState(it, isLoading = false) }
         .stateIn(viewModelScope, started = SharingStarted.WhileSubscribed(), VaultState())
+
+    @Composable
+    fun rememberFilters(): SnapshotStateList<FilterOption> {
+        val lastValue by Settings.Timeline.rememberLastSort()
+        return remember(lastValue) {
+            mutableStateListOf(
+                FilterOption(
+                    titleRes = R.string.filter_type_date,
+                    filterKind = FilterKind.DATE,
+                    onClick = { timelineOrder = it }
+                ),
+                FilterOption(
+                    titleRes = R.string.filter_type_name,
+                    filterKind = FilterKind.NAME,
+                    onClick = { timelineOrder = it }
+                ),
+                FilterOption(
+                    titleRes = R.string.filter_type_size,
+                    filterKind = FilterKind.SIZE,
+                    onClick = { timelineOrder = it }
+                ),
+                FilterOption(
+                    titleRes = R.string.filter_type_resolution,
+                    filterKind = FilterKind.RESOLUTION,
+                    onClick = { timelineOrder = it }
+                ),
+
+                )
+        }
+    }
 
     private sealed class Event {
         data object UpdateDatabase : Event()

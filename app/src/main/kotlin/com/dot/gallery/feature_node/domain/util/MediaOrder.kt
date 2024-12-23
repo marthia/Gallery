@@ -24,18 +24,32 @@ sealed class MediaOrder(open val orderType: OrderType) {
         override val orderType: OrderType
     ) : MediaOrder(orderType)
 
+    @Serializable
+    data class Resolution(
+        @SerialName("orderType_resolution")
+        override val orderType: OrderType
+    ) : MediaOrder(orderType)
+
+    @Serializable
+    data class Size(
+        @SerialName("orderType_size")
+        override val orderType: OrderType
+    ) : MediaOrder(orderType)
+
 
     @Serializable
     data class Expiry(
         @SerialName("orderType_expiry")
         override val orderType: OrderType = OrderType.Descending
-    ): MediaOrder(orderType)
+    ) : MediaOrder(orderType)
 
-    fun <T: Media> sortMedia(media: List<T>): List<T> {
+    fun <T : Media> sortMedia(media: List<T>): List<T> {
         return when (orderType) {
             OrderType.Ascending -> {
                 when (this) {
                     is Date -> media.sortedBy { it.definedTimestamp }
+                    is Resolution -> media.sortedBy { it.width * it.height }
+                    is Size -> media.sortedBy { it.size }
                     is Label -> media.sortedBy { it.label.lowercase() }
                     is Expiry -> media.sortedBy { it.expiryTimestamp ?: it.definedTimestamp }
                 }
@@ -44,8 +58,12 @@ sealed class MediaOrder(open val orderType: OrderType) {
             OrderType.Descending -> {
                 when (this) {
                     is Date -> media.sortedByDescending { it.definedTimestamp }
+                    is Resolution -> media.sortedByDescending { it.width * it.height }
+                    is Size -> media.sortedByDescending { it.size }
                     is Label -> media.sortedByDescending { it.label.lowercase() }
-                    is Expiry -> media.sortedByDescending { it.expiryTimestamp ?: it.definedTimestamp }
+                    is Expiry -> media.sortedByDescending {
+                        it.expiryTimestamp ?: it.definedTimestamp
+                    }
                 }
             }
         }
@@ -57,6 +75,7 @@ sealed class MediaOrder(open val orderType: OrderType) {
                 when (this) {
                     is Date -> albums.sortedBy { it.timestamp }
                     is Label -> albums.sortedBy { it.label.lowercase() }
+                    is Size -> albums.sortedBy { it.size }
                     else -> albums
                 }
             }
@@ -65,6 +84,7 @@ sealed class MediaOrder(open val orderType: OrderType) {
                 when (this) {
                     is Date -> albums.sortedByDescending { it.timestamp }
                     is Label -> albums.sortedByDescending { it.label.lowercase() }
+                    is Size -> albums.sortedByDescending { it.size }
                     else -> albums
                 }
             }

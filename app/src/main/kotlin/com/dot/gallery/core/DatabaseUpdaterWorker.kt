@@ -12,6 +12,7 @@ import androidx.work.WorkerParameters
 import com.dot.gallery.feature_node.data.data_source.InternalDatabase
 import com.dot.gallery.feature_node.domain.model.MediaVersion
 import com.dot.gallery.feature_node.domain.repository.MediaRepository
+import com.dot.gallery.feature_node.domain.util.MediaOrder
 import com.dot.gallery.feature_node.presentation.util.isMediaUpToDate
 import com.dot.gallery.feature_node.presentation.util.mediaStoreVersion
 import com.dot.gallery.feature_node.presentation.util.printDebug
@@ -52,7 +53,7 @@ class DatabaseUpdaterWorker @AssistedInject constructor(
             val mediaVersion = appContext.mediaStoreVersion
             printDebug("Database is not up to date. Updating to version $mediaVersion")
             database.getMediaDao().setMediaVersion(MediaVersion(mediaVersion))
-            val media = repository.getMedia().map { it.data ?: emptyList() }.firstOrNull()
+            val media = repository.getMedia(MediaOrder.Default).map { it.data ?: emptyList() }.firstOrNull()
             media?.let {
                 database.getMediaDao().updateMedia(it)
                 database.getClassifierDao().deleteDeclassifiedImages(it.fastMap { m -> m.id })

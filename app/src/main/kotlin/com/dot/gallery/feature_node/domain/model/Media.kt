@@ -10,6 +10,7 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Parcelable
 import android.webkit.MimeTypeMap
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import com.dot.gallery.core.Constants
 import com.dot.gallery.feature_node.domain.util.UriSerializer
@@ -38,6 +39,8 @@ sealed class Media : Parcelable, java.io.Serializable {
     abstract val favorite: Int
     abstract val trashed: Int
     abstract val size: Long
+    abstract val width: Long
+    abstract val height: Long
     abstract val duration: String?
 
     val definedTimestamp: Long
@@ -60,6 +63,10 @@ sealed class Media : Parcelable, java.io.Serializable {
         override val albumID: Long,
         override val albumLabel: String,
         override val timestamp: Long,
+        @ColumnInfo(defaultValue = "0")
+        override val width: Long = 0,
+        @ColumnInfo(defaultValue = "0")
+        override val height: Long = 0,
         override val expiryTimestamp: Long? = null,
         override val takenTimestamp: Long? = null,
         override val fullDate: String,
@@ -83,6 +90,10 @@ sealed class Media : Parcelable, java.io.Serializable {
         override val albumID: Long,
         override val albumLabel: String,
         override val timestamp: Long,
+        @ColumnInfo(defaultValue = "0")
+        override val width: Long = 0,
+        @ColumnInfo(defaultValue = "0")
+        override val height: Long = 0,
         override val expiryTimestamp: Long?,
         override val takenTimestamp: Long?,
         override val fullDate: String,
@@ -106,6 +117,10 @@ sealed class Media : Parcelable, java.io.Serializable {
         override val albumID: Long,
         override val albumLabel: String,
         override val timestamp: Long,
+        @ColumnInfo(defaultValue = "0")
+        override val width: Long = 0 ,
+        @ColumnInfo(defaultValue = "0")
+        override val height: Long = 0,
         override val expiryTimestamp: Long? = null,
         override val takenTimestamp: Long? = null,
         override val fullDate: String,
@@ -130,6 +145,8 @@ sealed class Media : Parcelable, java.io.Serializable {
             if (albumID != other.albumID) return false
             if (albumLabel != other.albumLabel) return false
             if (timestamp != other.timestamp) return false
+            if (width != other.width) return false
+            if (height != other.height) return false
             if (expiryTimestamp != other.expiryTimestamp) return false
             if (takenTimestamp != other.takenTimestamp) return false
             if (fullDate != other.fullDate) return false
@@ -151,6 +168,8 @@ sealed class Media : Parcelable, java.io.Serializable {
             result = 31 * result + albumID.hashCode()
             result = 31 * result + albumLabel.hashCode()
             result = 31 * result + timestamp.hashCode()
+            result = 31 * result + width.hashCode()
+            result = 31 * result + height.hashCode()
             result = 31 * result + (expiryTimestamp?.hashCode() ?: 0)
             result = 31 * result + (takenTimestamp?.hashCode() ?: 0)
             result = 31 * result + fullDate.hashCode()
@@ -206,6 +225,8 @@ sealed class Media : Parcelable, java.io.Serializable {
                 albumID = -99L,
                 albumLabel = "",
                 timestamp = timestamp,
+                width = 0,
+                height = 0,
                 fullDate = formattedDate,
                 mimeType = mimeType,
                 duration = duration,

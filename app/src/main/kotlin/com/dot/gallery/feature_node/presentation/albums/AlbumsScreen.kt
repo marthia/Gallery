@@ -95,6 +95,8 @@ fun AlbumsScreen(
             when (selectedFilter.filterKind) {
                 FilterKind.DATE -> MediaOrder.Date(lastSort.orderType)
                 FilterKind.NAME -> MediaOrder.Label(lastSort.orderType)
+                FilterKind.SIZE -> MediaOrder.Size(lastSort.orderType)
+                FilterKind.RESOLUTION -> MediaOrder.Resolution(lastSort.orderType)
             }
         )
     }
