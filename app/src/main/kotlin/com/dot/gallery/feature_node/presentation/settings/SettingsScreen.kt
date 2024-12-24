@@ -339,6 +339,23 @@ fun rememberSettingsList(
         )
     }
 
+    var hideTimelineHeaders by Settings.Timeline.rememberHideTimelineHeaders()
+    val hideTimelineHeadersPref = remember(hideTimelineHeaders) {
+        SettingsEntity.SwitchPreference(
+            title = context.getString(R.string.timeline_headers_title),
+            summary = context.getString(R.string.timeline_headers_summary),
+            isChecked = hideTimelineHeaders,
+            onCheck = {
+                scope.launch {
+                    scope.async { hideTimelineHeaders = it }.await()
+                    delay(50)
+                    context.restartApplication()
+                }
+            },
+            screenPosition = Position.Middle
+        )
+    }
+
     var hideTimelineOnAlbum by Settings.Album.rememberHideTimelineOnAlbum()
     val hideTimelineOnAlbumPref = remember(hideTimelineOnAlbum) {
         SettingsEntity.SwitchPreference(
@@ -490,6 +507,7 @@ fun rememberSettingsList(
             add(dateHeaderPref)
             add(groupByMonthPref)
             add(allowBlurPref)
+            add(hideTimelineHeadersPref)
             add(hideTimelineOnAlbumPref)
             add(forcedLastScreenPref)
             add(audioFocusPref)

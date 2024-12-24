@@ -196,11 +196,11 @@ object Settings {
             }
         }
 
-        private val HIDE_TIMELINE_ON_ALBUM = booleanPreferencesKey("hide_timeline_on_album")
+        private val HIDE_TIMELINE_HEADERS = booleanPreferencesKey("hide_timeline_headers")
 
         @Composable
-        fun rememberHideTimelineOnAlbum() =
-            rememberPreference(key = HIDE_TIMELINE_ON_ALBUM, defaultValue = false)
+        fun rememberHideTimelineHeaders() =
+            rememberPreference(key = HIDE_TIMELINE_HEADERS, defaultValue = false)
     }
 
     object Search {

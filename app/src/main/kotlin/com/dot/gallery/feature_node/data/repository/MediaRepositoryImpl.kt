@@ -88,7 +88,7 @@ class MediaRepositoryImpl(
     override fun getMedia(mediaOrder: MediaOrder): Flow<Resource<List<UriMedia>>> =
         MediaFlow(
             contentResolver = contentResolver,
-            buckedId = MediaStoreBuckets.MEDIA_STORE_BUCKET_TIMELINE.id
+            buckedId = MediaStoreBuckets.MEDIA_STORE_BUCKET_PHOTOS.id
         ).flowData().map {
             Resource.Success(mediaOrder.sortMedia(it))
         }.flowOn(Dispatchers.IO)

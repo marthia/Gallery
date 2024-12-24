@@ -20,7 +20,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.dot.gallery"
+        applicationId = "me.marthia.fastgallery"
         minSdk = 30
         targetSdk = 35
         versionCode = 31020
