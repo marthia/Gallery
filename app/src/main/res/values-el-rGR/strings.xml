@@ -293,4 +293,6 @@
         <item quantity="other">%s items</item>
     </plurals>
     <string name="filter_type_size">Size</string>
+    <string name="timeline_headers_summary">Do Not Show Date Categories in Timeline (Restarts App)</string>
+    <string name="timeline_headers_title">Hide Timeline Headers</string>
 </resources>

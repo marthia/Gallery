@@ -74,6 +74,7 @@ fun <T : Media> PinchZoomGridScope.MediaGridView(
     emptyContent: @Composable () -> Unit,
     onMediaClick: @DisallowComposableCalls (media: T) -> Unit = {},
 ) {
+
     val mappedData by remember(mediaState, showMonthlyHeader) {
         derivedStateOf {
             (if (showMonthlyHeader) mediaState.value.mappedMediaWithMonthly

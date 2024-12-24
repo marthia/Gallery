@@ -38,6 +38,7 @@ import com.dot.gallery.core.Constants.Target.TARGET_TRASH
 import com.dot.gallery.core.Settings.Album.rememberHideTimelineOnAlbum
 import com.dot.gallery.core.Settings.Misc.rememberLastScreen
 import com.dot.gallery.core.Settings.Misc.rememberTimelineGroupByMonth
+import com.dot.gallery.core.Settings.Timeline.rememberHideTimelineHeaders
 import com.dot.gallery.core.presentation.components.util.OnLifecycleEvent
 import com.dot.gallery.core.presentation.components.util.permissionGranted
 import com.dot.gallery.feature_node.domain.model.MediaState
@@ -168,6 +169,8 @@ fun NavigationComp(
         composable(
             route = Screen.TimelineScreen()
         ) {
+
+            val hideTimelineHeaders by rememberHideTimelineHeaders()
             TimelineScreen(
                 paddingValues = paddingValues,
                 handler = timelineViewModel.handler,
@@ -179,6 +182,8 @@ fun NavigationComp(
                 filterOptions = timelineViewModel.rememberFilters(),
                 navigate = navPipe::navigate,
                 navigateUp = navPipe::navigateUp,
+                allowHeaders = !hideTimelineHeaders,
+                enableStickyHeaders = !hideTimelineHeaders,
                 toggleNavbar = navPipe::toggleNavbar,
                 isScrolling = isScrolling,
                 searchBarActive = searchBarActive,

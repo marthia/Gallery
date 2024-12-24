@@ -287,6 +287,8 @@
     <string name="date_header">Date Formats</string>
     <string name="date_header_summary">Set your own custom date formats</string>
     <string name="launch_on_library">Launch on Library</string>
+    <string name="timeline_headers_summary">Do Not Show Date Categories in Timeline (Restarts App)</string>
+    <string name="timeline_headers_title">Hide Timeline Headers</string>
     <plurals name="item_count">
         <item quantity="one">%s pozycja</item>
         <item quantity="few">%s pozycji</item>
