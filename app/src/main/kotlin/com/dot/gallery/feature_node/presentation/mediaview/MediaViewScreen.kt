@@ -8,7 +8,7 @@ package com.dot.gallery.feature_node.presentation.mediaview
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -192,8 +192,15 @@ fun <T : Media> MediaViewScreen(
 
     val userScrollEnabled by rememberedDerivedState { sheetState.currentDetent != FullyExpanded }
 
-    var storedNormalizationTarget by rememberSaveable(mediaState.value, currentPage, lastSheetHeightDp) { mutableFloatStateOf(0f) }
-    val isNormalizationTargetSet by rememberedDerivedState(mediaState.value, storedNormalizationTarget) {
+    var storedNormalizationTarget by rememberSaveable(
+        mediaState.value,
+        currentPage,
+        lastSheetHeightDp
+    ) { mutableFloatStateOf(0f) }
+    val isNormalizationTargetSet by rememberedDerivedState(
+        mediaState.value,
+        storedNormalizationTarget
+    ) {
         lastSheetHeightDp.dp == sheetHeightDp
                 && currentPage == pagerState.currentPage
                 && storedNormalizationTarget > 0f
@@ -202,7 +209,12 @@ fun <T : Media> MediaViewScreen(
     }
 
 
-    val normalizationTarget by rememberedDerivedState(mediaState.value, currentPage, sheetState.offset, storedNormalizationTarget) {
+    val normalizationTarget by rememberedDerivedState(
+        mediaState.value,
+        currentPage,
+        sheetState.offset,
+        storedNormalizationTarget
+    ) {
         if (isNormalizationTargetSet) {
             storedNormalizationTarget
         } else {
@@ -210,8 +222,7 @@ fun <T : Media> MediaViewScreen(
             if (newOffset > 0f && newOffset < 1f) {
                 storedNormalizationTarget = newOffset
                 newOffset
-            }
-            else storedNormalizationTarget
+            } else storedNormalizationTarget
         }
     }
 
@@ -309,7 +320,7 @@ fun <T : Media> MediaViewScreen(
                 flingBehavior = PagerDefaults.flingBehavior(
                     state = pagerState,
                     snapAnimationSpec = tween(
-                        easing = FastOutLinearInEasing,
+                        easing = LinearOutSlowInEasing,
                         durationMillis = DEFAULT_LOW_VELOCITY_SWIPE_DURATION
                     ),
                     snapPositionalThreshold = 0.3f
