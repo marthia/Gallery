@@ -207,6 +207,12 @@ open class MediaViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Adds a media item to a specific vault.
+     *
+     * @param vault The [Vault] destination where the media will be added.
+     * @param media The media item (inheriting from [Media]) to be stored.
+     */
     fun <T : Media> addMedia(vault: Vault, media: T) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addMedia(vault, media)
@@ -228,6 +234,14 @@ open class MediaViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Toggles the selection state of a media item at a given index.
+     * If the item is already selected, it will be removed from the selection.
+     * If the item is not selected, it will be added to the selection.
+     * This also updates the multi-select state based on whether any items are currently selected.
+     *
+     * @param index The position of the media item in the current media flow.
+     */
     fun toggleSelection(index: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val item = mediaFlow.value.media[index]
@@ -241,6 +255,15 @@ open class MediaViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Queries the media collection based on a given string.
+     *
+     * If the query is empty, the search state is cleared.
+     * Otherwise, it performs a fuzzy search on the existing media list and updates the
+     * search media state with the filtered results.
+     *
+     * @param query The search string used to filter media items.
+     */
     fun queryMedia(query: String) {
         viewModelScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
@@ -264,6 +287,17 @@ open class MediaViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Filters the list of media items based on a fuzzy search query.
+     *
+     * This function utilizes [FuzzySearch] to match the query against the string representation
+     * of each media item. It performs the search on a background dispatcher to ensure
+     * the UI remains responsive.
+     *
+     * @param query The search string provided by the user.
+     * @return A list of media items that match the query with a minimum score of 60,
+     * sorted by their match relevance. Returns an empty list if the query is empty or no matches are found.
+     */
     private suspend fun <T : Media> List<T>.parseQuery(query: String): List<T> {
         return withContext(Dispatchers.IO) {
             if (query.isEmpty())

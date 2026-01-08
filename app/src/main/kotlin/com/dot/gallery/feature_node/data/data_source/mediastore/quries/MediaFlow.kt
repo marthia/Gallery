@@ -126,25 +126,25 @@ class MediaFlow(
         )
     }
 
-    override fun flowData() = flowCursor().mapEachRow(MediaQuery.MediaProjection) { it, indexCache ->
+    override fun flowData() = flowCursor().mapEachRow(MediaQuery.MediaProjection) { cursor, indexCache ->
         var i = 0
 
-        val id = it.getLong(indexCache[i++])
-        val path = it.getString(indexCache[i++])
-        val relativePath = it.getString(indexCache[i++])
-        val title = it.getString(indexCache[i++])
-        val albumID = it.getLong(indexCache[i++])
-        val albumLabel = it.tryGetString(indexCache[i++], Build.MODEL)
-        val takenTimestamp = it.tryGetLong(indexCache[i++])
-        val width = it.getLong(indexCache[i++])
-        val height = it.getLong(indexCache[i++])
-        val modifiedTimestamp = it.getLong(indexCache[i++])
-        val duration = it.tryGetString(indexCache[i++])
-        val size = it.getLong(indexCache[i++])
-        val mimeType = it.getString(indexCache[i++])
-        val isFavorite = it.getInt(indexCache[i++])
-        val isTrashed = it.getInt(indexCache[i++])
-        val expiryTimestamp = it.tryGetLong(indexCache[i])
+        val id = cursor.getLong(indexCache[i++])
+        val path = cursor.getString(indexCache[i++])
+        val relativePath = cursor.getString(indexCache[i++])
+        val title = cursor.getString(indexCache[i++])
+        val albumID = cursor.getLong(indexCache[i++])
+        val albumLabel = cursor.tryGetString(indexCache[i++], Build.MODEL)
+        val takenTimestamp = cursor.tryGetLong(indexCache[i++])
+        val modifiedTimestamp = cursor.getLong(indexCache[i++])
+        val duration = cursor.tryGetString(indexCache[i++])
+        val size = cursor.getLong(indexCache[i++])
+        val width = cursor.getLong(indexCache[i++])
+        val height = cursor.getLong(indexCache[i++])
+        val mimeType = cursor.getString(indexCache[i++])
+        val isFavorite = cursor.getInt(indexCache[i++])
+        val isTrashed = cursor.getInt(indexCache[i++])
+        val expiryTimestamp = cursor.tryGetLong(indexCache[i])
         val contentUri = if (mimeType.contains("image"))
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         else
@@ -160,8 +160,6 @@ class MediaFlow(
             albumID = albumID,
             albumLabel = albumLabel ?: Build.MODEL,
             timestamp = modifiedTimestamp,
-            width = width,
-            height = height,
             takenTimestamp = takenTimestamp,
             expiryTimestamp = expiryTimestamp,
             fullDate = formattedDate,
@@ -169,6 +167,8 @@ class MediaFlow(
             favorite = isFavorite,
             trashed = isTrashed,
             size = size,
+            width = width,
+            height = height,
             mimeType = mimeType
         )
     }

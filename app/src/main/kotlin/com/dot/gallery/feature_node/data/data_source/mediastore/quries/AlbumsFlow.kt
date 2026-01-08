@@ -77,17 +77,19 @@ class AlbumsFlow(
         )
     }
 
-    override fun flowData() = flowCursor().map {
+    override fun flowData() = flowCursor().map { cursor ->
         mutableMapOf<Int, Album>().apply {
-            it?.use {
+            cursor?.use {
                 val idIndex = it.getColumnIndex(MediaStore.Files.FileColumns._ID)
                 val albumIdIndex = it.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_ID)
                 val labelIndex = it.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
                 val thumbnailPathIndex = it.getColumnIndex(MediaStore.Files.FileColumns.DATA)
                 val thumbnailRelativePathIndex =
                     it.getColumnIndex(MediaStore.Files.FileColumns.RELATIVE_PATH)
-                val thumbnailDateTakenIndex = it.getColumnIndex(MediaStore.Files.FileColumns.DATE_TAKEN)
-                val thumbnailDateIndex = it.getColumnIndex(MediaStore.Files.FileColumns.DATE_MODIFIED)
+                val thumbnailDateTakenIndex =
+                    it.getColumnIndex(MediaStore.Files.FileColumns.DATE_TAKEN)
+                val thumbnailDateIndex =
+                    it.getColumnIndex(MediaStore.Files.FileColumns.DATE_MODIFIED)
                 val sizeIndex = it.getColumnIndex(MediaStore.Files.FileColumns.SIZE)
                 val mimeTypeIndex = it.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE)
 
